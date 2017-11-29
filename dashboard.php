@@ -13,9 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="dist/js/miner.js"></script>
     <title>Miner Monitoring Dashboard</title>
-</head>
-<body>
 <header>
 <div class="wrapper navbar-fixed">
 <!-- TOP NAV BAR !-->   
@@ -33,11 +32,14 @@
       <a href="#!user"><img class="responsive-img" src="images/logo.png"></a>
       <p class="center-align" style="color: black;">Miners monitoring dashboard</p>
     </div></li>
+    <li class="active"><a href="#!" onclick="loadmain();"><i class="material-icons">dashboard</i>Main</a></li>
     <li><a href="#!" onclick="loadmonit();"><i class="material-icons">ac_unit</i>Temperatures</a></li>
     <li><a href="#!" onclick="loadmonitold();"><i class="material-icons">remove_red_eye</i>Old Dashboard</a></li>
   </ul>
 <!-- END SIDE NAVIGATION BAR !-->
 </header>
+</head>
+<body>
 <div class="custcontainer">
 <!-- Page Content goes here -->
 </div>
@@ -47,6 +49,8 @@ $(".button-collapse").sideNav({
       closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
       draggable: true // Choose whether you can drag to open on touch screens
     });
+function loadmain(){$(".custcontainer").load("pages/main.html");}
 function loadmonit(){$(".custcontainer").load("pages/tempmon.html");}
 function loadmonitold(){$(".custcontainer").load("pages/miner2.php");}
+$(document).ready(loadmain());
 </script>
