@@ -2,7 +2,10 @@
 Claymore Monitor Dashboard
 
 How it currently looks: 
-![alt text](http://url/to/img.png)
+![alt text](https://raw.githubusercontent.com/adonisd/miner/master/images/sample/Capture.JPG)
+![alt text](https://raw.githubusercontent.com/adonisd/miner/master/images/sample/Capture2.JPG)
+![alt text](https://raw.githubusercontent.com/adonisd/miner/master/images/sample/Capture3.JPG)
+![alt text](https://raw.githubusercontent.com/adonisd/miner/master/images/sample/Capture4.JPG)
 
 Node-red Import Flow: 
 <code>
