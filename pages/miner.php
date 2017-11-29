@@ -1,111 +1,12 @@
-<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <style>
-        .chartWrapper {
-            position: relative;         
-        }
-
-        .chartWrapper > canvas {
-            position: absolute;
-            left: 0;
-            top: 0;
-            pointer-events:none;
-        }
-.chartAreaWrapper {
-          overflow-x: scroll;
-            position: relative;
-            width: 100%;
-        }
-
-        .chartAreaWrapper2 {  
-            position: relative;
-            height: 600px;
-            max-height:600px
-        }
-    #myChart {max-height: 600px;}
-    .container {
-  width: 400px;
-  height: 200px;
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  overflow: hidden;
-  text-align: center;
-  transform: translate(-50%, -50%);
-}
-
-.gauge-a {
-  z-index: 1;
-  position: absolute;
-  background-color: rgba(255,255,255,.2);
-  width: 400px;
-  height: 200px;
-  top: 0%;
-  border-radius: 250px 250px 0px 0px;
-}
-
-.gauge-b {
-  z-index: 3;
-  position: absolute;
-  background-color: #222;
-  width: 250px;
-  height: 125px;
-  top: 75px;
-  margin-left: 75px;
-  margin-right: auto;
-  border-radius: 250px 250px 0px 0px;
-}
-
-.gauge-c {
-  z-index: 2;
-  position: absolute;
-  background-color: #5664F9;
-  width: 400px;
-  height: 200px;
-  top: 200px;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0px 0px 200px 200px;
-  transform-origin: center top;
-  transition: all 1.3s ease-in-out;
-}
-
-.container:hover .gauge-c {  transform:rotate(.5turn);
-}
-
-.container:hover .gauge-data { color: rgba(255,255,255,1); }
-
-.gauge-data {
-  z-index: 4;
-  color: rgba(255,255,255,.2);
-  font-size: 1.5em;
-  line-height: 25px;
-  position: absolute;
-  width: 400px;
-  height: 200px;
-  top: 90px;
-  margin-left: auto;
-  margin-right: auto;
-  transition: all 1s ease-out;
-}
+/*    body {background-color: #263238;}*/
 </style>
-<head></head>
-<body>
-    <div class="chartWrapper">
-      <div class="chartAreaWrapper">
-        <div class="chartAreaWrapper2" style="width: 800px; max-height:600px">
-            <canvas id="myChart" max-height="600" height="600" width="800"></canvas>
-        </div>
-      </div>
-        <canvas id="myChartAxis" height="300" width="0"></canvas>
-    </div>
-      <div id="gauges"></div>
-      <div class="row">
-      </div>
-</body>
+  <div class="card-panel blue-grey darken-1 hoverable" style="margin: 10px;">
+        <div id="chart_div" style="width: 100%; height: 800px;"></div>
+  </div>
+  <div id="gauges"></div>
+  <div class="row"></div>
 <script>
 var data = [];
 var data2 = [];
@@ -114,6 +15,7 @@ var counter = [];
 var temperature = [];
 var fan = [];
 var gpucount = 0;
+var googledata = [['Label', 'Value']];
 function miners() {
 	var socketStatus = document.getElementById('status');
 	var socket = new WebSocket("ws://10.0.0.32:1880/ws/miner");
@@ -127,15 +29,6 @@ function miners() {
 	socket.onmessage = function(event) {
 	  message = event.data;
       obj = JSON.parse(message);
-      if (obj.id === 0) {
-        counternum += 1;
-        counter.push(counternum);
-        newwidth = $('.chartAreaWrapper2').width() +60;
-        $('.chartAreaWrapper2').width(newwidth);
-        //$("#myChart").attr("width", newwidth);
-        //$('.chartAreaWrapper').animate({scrollLeft:newwidth}); 
-      }
-        //$(".card-title").replaceWith("<span class='card-title'>"+obj.id+"</span>");
         divname = "#" + obj.id;
         toteth = obj.result[2];
         splittoteth = toteth.split(";");
@@ -151,10 +44,17 @@ function miners() {
                 divgaugenamew = "temp" + obj.id + gpucount;
                 divgaugename = "#" + divgaugenamew;
                 if ($(divgaugename).length == 0){
-                   $("#gauges").append("<div class='col s2 m2' id='temp"+obj.id + gpucount+"'>Miner: "+temperature[0]+"GPU: "+temperature[1]+" Temp: "+temperature[2]+"</div>"); 
+                   $("#gauges").append("<div id='temp"+obj.id + gpucount+"' style=' display: none;'></div>"); 
+//                    googledata.push([divgaugename, parseInt(tempfan[i])]);
+//                    data = google.visualization.arrayToDataTable([[googledata]]);
+                    blou = [divgaugename, parseInt(tempfan[i])];
+                    data.addRows([blou]);
                 } else {
-                    $(divgaugename).replaceWith("<div class='col s2 m2' id='temp"+obj.id + gpucount+"'>Miner: "+temperature[0]+" GPU: "+temperature[1]+" Temp: "+temperature[2]+"</div>");
+//                    $(divgaugename).replaceWith("<div class='col s2 m2' id='temp"+obj.id + gpucount+"'>Miner: "+temperature[0]+" GPU: "+temperature[1]+" Temp: "+temperature[2]+"</div>");
+                    bla = data.getFilteredRows([{column: 0, value: divgaugename}]);
+                    data.setCell(bla[0], 1, parseInt(tempfan[i]));
                 }
+                chart.draw(data, options);
                 gpucount += 1;
             }
             else {
@@ -206,63 +106,34 @@ function miners() {
                             +"    </div>");
         }
 	 //HERE
-        
-        check = 0;
-        for (i in window.myLine.data.datasets){
-            vdataset = window.myLine.data.datasets[i];
-            if (vdataset.label === obj.id) {
-                check = 1;
-            }
-        }
-        if (check === 1){
-            for (i in window.myLine.data.datasets){
-            vdataset = window.myLine.data.datasets[i];
-            if (vdataset.label === obj.id) {
-                vdataset.data.push(toteth);
-            }
-        }
-        } else {
-            backgroundcolor = getRandomRgb();
-            //data2[obj.id].push(toteth);
-            var newDataset = {
-            backgroundColor: backgroundcolor,
-            borderColor: backgroundcolor,
-            borderWidth: 1,
-            label: obj.id,
-            fill: false
-            }
-            window.myLine.data.datasets.push(newDataset);
-        }
-    // You update the chart to take into account the new dataset
-    window.myLine.update();
     gpucount = 0;
     };
 }
 miners();
+google.charts.load('current', {'packages':['gauge']});
+google.charts.setOnLoadCallback(drawChart);
 
-var ctx = $("#myChart");
-$( document ).ready(function(){
-window.myLine = new Chart(ctx, {
-    options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-               yAxes: [{
-                display: true,
-                position: 'right'
-               }, {
-                display: true,
-                position: 'left'
-               }]
-             }
-    },
-    type: 'line',
-    data: {
-    labels: counter,
-    datasets: []}
-});
-});
-    
+      function drawChart() {
+        options = {
+//          width: 1000, height: 800,
+          redFrom: 79, redTo: 100,
+          yellowFrom:70, yellowTo: 79,
+          minorTicks: 5
+        };
+//        data = google.visualization.arrayToDataTable([
+//          ['Label', 'Value']
+//        ]);
+          
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Miner/Fan');
+        data.addColumn('number', 'value');
+
+
+        chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        //chart.draw(data, options);
+      }
+
 function getRandomRgb() {
     var num = Math.round(0xffffff * Math.random());
     var r = num >> 16;

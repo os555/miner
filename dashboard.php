@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="http://TLC.dwl.local/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="dist/js/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -51,6 +51,6 @@ $(".button-collapse").sideNav({
     });
 function loadmain(){$(".custcontainer").load("pages/main.html");}
 function loadmonit(){$(".custcontainer").load("pages/tempmon.html");}
-function loadmonitold(){$(".custcontainer").load("pages/miner2.php");}
+function loadmonitold(){$(".custcontainer").load("pages/miner.php");}
 $(document).ready(loadmain());
 </script>
