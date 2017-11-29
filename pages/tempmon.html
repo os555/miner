@@ -1,4 +1,5 @@
 <!--<form class="col s12">-->
+<!--
 <div class="row col s12">
     <div class="input-field col s6">
       <i class="material-icons prefix">ac_unit</i>
@@ -11,10 +12,10 @@
     </button>
     </div>
 </div>
+-->
 <!--</form>-->
 <div id="chart_div" style="width: 100%; height: 100%;"></div>
 <script>
-var deftemp = 80;
 $(document).ready(function(){
     socket.onmessage = function(event) {
     message = event.data;
@@ -82,7 +83,4 @@ function redplease(evt, tempevt){
     }
 });
 } 
-function gettemp(){
-   deftemp = $("#icon_prefix").val(); 
-};
 </script>

@@ -42,11 +42,30 @@
 </header>
 </head>
 <body>
+<div class="row col s12">
+    <div class="input-field col s6">
+      <i class="material-icons prefix">ac_unit</i>
+      <input id="icon_prefix" type="text" class="validate">
+      <label for="icon_prefix">Temperature to warn (Default: 80)</label>
+    </div>
+    <div class="input-field col s6">
+      <i class="material-icons prefix">explicit</i>
+      <input id="maxhasheth" type="text" class="validate">
+      <label for="maxhasheth">Maximum Hashrate ETH (Default: 200)</label>
+    </div>
+    <div class="col s6 input-field">
+    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="gettemp();">Submit
+        <i class="material-icons right">send</i>
+    </button>
+    </div>
+</div>
 <div class="custcontainer">
 <!-- Page Content goes here -->
 </div>
 </body>
 <script>
+var deftemp = 80;
+var maxhasheth = 200;
 $(".button-collapse").sideNav({
       closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
       draggable: true // Choose whether you can drag to open on touch screens
@@ -55,4 +74,15 @@ function loadmain(){$(".custcontainer").load("pages/main.html");}
 function loadmonit(){$(".custcontainer").load("pages/tempmon.html");}
 function loadmonitold(){$(".custcontainer").load("pages/miner.php");}
 $(document).ready(loadmain());
+
+function gettemp(){
+    if (parseInt($("#icon_prefix").val) != 0 ) {
+   deftemp = $("#icon_prefix").val(); } 
+    if (parseInt($("#maxhasheth").val) != 0 ) {
+    maxhasheth = parseInt($("#maxhasheth").val()); 
+    for (i=0; i < g.length; i++){
+        g[i].refresh(g[i].originalValue, maxhasheth);
+        }
+    }
+};
 </script>

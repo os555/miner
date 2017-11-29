@@ -46,7 +46,7 @@ $(document).ready(function(){
                             +"     <i class='material-icons'>developer_board</i>"
                             +"      Miner: "+parsedobj.id
 //                            +"      <span class='badge'>Total ETH Hash Rate: "+totethhas+"</span></div>"            
-                            +"      <div id='"+gaugediv[parsedobj.id]+"' style='width:100px; height:80px'></div></div>"    
+                            +"      <div id='"+gaugediv[parsedobj.id]+"' style='width:80px; height:60px'></div></div>"    
                             +"        <div class='collapsible-body blue-grey darken-1'>"
                             +"          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
                             +"          <p>Running version: "+parsedobj.result[0]+"</p>"
@@ -84,7 +84,7 @@ function gage (evt){
     id: gaugediv[evt],
     value: totaltoteth[evt],
     min: 0,
-    max: 200,
+    max: maxhasheth,
     title: "Total ETH rate"
     });
 };
