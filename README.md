@@ -1,5 +1,5 @@
 # miner
-Claymore Monitor Dashboard
+Claymore Monitor Dashboard (This is not affiliated with the Claymore Team)
 
 Installation instructions in short:
 have apache2/PHP5/node-red installed
