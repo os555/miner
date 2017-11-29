@@ -1,6 +1,24 @@
-<div class="row"></div>
+<style>
+    .collapsible-body {color: white;}
+</style>
+
+<div class="row">
+    <div class="col s12 m12">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title center-align">Summary</span>
+          <div id="totalrates"></div>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row">
+  <ul class="collapsible" data-collapsible="expandable">
+  </ul>   
+</div>
 <script>
-miners();
+var totaltoteth = [];
+var totaltotsia = [];
 $(document).ready(function(){
 	socket.onmessage = function(event) {
 	  message = event.data;
@@ -14,48 +32,44 @@ $(document).ready(function(){
         tempfan = obj.result[6].split(";");
         totethhas = (splittoteth[0] / 1000).toFixed(3) + " MH/s";
         toteth = (splittoteth[0] / 1000).toFixed(3);
+        totaltoteth[obj.id] = parseFloat(toteth);
         totsia = obj.result[4];
         splittosia = totsia.split(";");
         totsiahash = (splittosia[0]/1000).toFixed(3) + " MH/s";
+        totaltotsia[obj.id] = parseFloat(splittosia[0]/1000);
         if ($(divname).length == 0 ){
-            $(".row").append("    <div id='"+obj.id+"' class='col s12 m6'>"
-                            +"      <div class='card blue-grey darken-1 hoverable'>"
-                            +"        <div class='card-content white-text'>"
+            $(".collapsible").append("<li id='"+obj.id+"'><div class='collapsible-header'>"
+                            +"     <i class='material-icons'>developer_board</i>"
+                            +"      Miner: "+obj.id
+                            +"      <span class='badge'>Total ETH Hash Rate: "+totethhas+"</span></div>"            
+                            +"        <div class='collapsible-body blue-grey darken-1'>"
                             +"          <span class='card-title'>Miner: "+obj.id+"</span>"
-                            +"          <p>Running version: "+obj.result[0]+"</p><br>"
-                            +"          <p>Total Hash Rate: "+totethhas+"</p><br>"
-                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p><br>"
-                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+"<br>"
-                            +"          <p>Total Sia Rate: "+totsiahash+"</p><br>"
-                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"<br>"
+                            +"          <p>Running version: "+obj.result[0]+"</p>"
+                            +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
+                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
+                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
+                            +"          <p>Total Sia Rate: "+totsiahash+"</p>"
+                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+""
                             +"        </div>"
-                            +"        <div class='card-action'>"
-                            +"          <a href='#'>This is a link</a>"
-                            +"          <a href='#'>This is a link</a>"
-                            +"        </div>"
-                            +"      </div>"
-                            +"    </div>");
+                            +"    </li>");
         } else {
-           $(divname).replaceWith("    <div id='"+obj.id+"' class='col s12 m6'>"
-                            +"      <div class='card blue-grey darken-1 hoverable'>"
-                            +"        <div class='card-content white-text'>"
-                            +"          <span class='card-title'>Miner: "+obj.id+"</span>"
-                            +"          <p>Running version: "+obj.result[0]+"</p><br>"
-                            +"          <p>Total Hash Rate: "+totethhas+"</p><br>"
-                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p><br>"
-                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+"<br>"
-                            +"          <p>Total Sia Rate: "+totsiahash+"</p><br>"
-                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"<br>"
-                            +"        </div>"
-                            +"        <div class='card-action'>"
-                            +"          <a href='#'>This is a link</a>"
-                            +"          <a href='#'>This is a link</a>"
-                            +"        </div>"
-                            +"      </div>"
-                            +"    </div>");
+        $(divname+" .badge").html("Total ETH Hash Rate: "+totethhas);
+        $(divname+" .collapsible-body").html("          <span class='card-title'>Miner: "+obj.id+"</span>"
+                            +"          <p>Running version: "+obj.result[0]+"</p>"
+                            +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
+                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
+                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
+                            +"          <p>Total Sia Rate: "+totsiahash+"</p>"
+                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"");
         }
-	 //HERE
     gpucount = 0;
+    sumeth = totaltoteth.reduce(function(a,b) {return a + b});
+    sumsia = totaltotsia.reduce(function(a,b) {return a + b});
+    $("#totalrates").html("<p>Total ETH Rate: "+sumeth.toFixed(3)+ " MH/s</p>"
+                         +"<p> Total SIA Rate: "+sumsia.toFixed(3)+ " MH/s</p>");
     };
 });
+  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
 </script>

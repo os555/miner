@@ -19,32 +19,37 @@
 <script>
 var totaltoteth = [];
 var totaltotsia = [];
+var gaugediv = [];
+var toteth = [];
+var g = [];
 $(document).ready(function(){
 	socket.onmessage = function(event) {
 	  message = event.data;
-      obj = JSON.parse(message);
-        divname = "#" + obj.id;
-        toteth = obj.result[2];
+      parsedobj = JSON.parse(message);
+        divname = "#" + parsedobj.id;
+        toteth = parsedobj.result[2];
         splittoteth = toteth.split(";");
         //VGA SEGRAGATION
-        gpus = obj.result[3].split(";");
+        gpus = parsedobj.result[3].split(";");
         //TEMP and FAN SEGRAGATION
-        tempfan = obj.result[6].split(";");
+        tempfan = parsedobj.result[6].split(";");
         totethhas = (splittoteth[0] / 1000).toFixed(3) + " MH/s";
-        toteth = (splittoteth[0] / 1000).toFixed(3);
-        totaltoteth[obj.id] = parseFloat(toteth);
-        totsia = obj.result[4];
+        toteth = parseFloat((splittoteth[0] / 1000).toFixed(3));
+        totaltoteth[parsedobj.id] = parseFloat(toteth);
+        totsia = parsedobj.result[4];
         splittosia = totsia.split(";");
         totsiahash = (splittosia[0]/1000).toFixed(3) + " MH/s";
-        totaltotsia[obj.id] = parseFloat(splittosia[0]/1000);
+        totaltotsia[parsedobj.id] = parseFloat(splittosia[0]/1000);
+        gaugediv[parsedobj.id] = divname + "gauge";
         if ($(divname).length == 0 ){
-            $(".collapsible").append("<li id='"+obj.id+"'><div class='collapsible-header'>"
+            $(".collapsible").append("<li id='"+parsedobj.id+"'><div class='collapsible-header'>"
                             +"     <i class='material-icons'>developer_board</i>"
-                            +"      Miner: "+obj.id
-                            +"      <span class='badge'>Total ETH Hash Rate: "+totethhas+"</span></div>"            
+                            +"      Miner: "+parsedobj.id
+//                            +"      <span class='badge'>Total ETH Hash Rate: "+totethhas+"</span></div>"            
+                            +"      <div id='"+gaugediv[parsedobj.id]+"' style='width:100px; height:80px'></div></div>"    
                             +"        <div class='collapsible-body blue-grey darken-1'>"
-                            +"          <span class='card-title'>Miner: "+obj.id+"</span>"
-                            +"          <p>Running version: "+obj.result[0]+"</p>"
+                            +"          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
+                            +"          <p>Running version: "+parsedobj.result[0]+"</p>"
                             +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
                             +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
                             +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
@@ -52,15 +57,17 @@ $(document).ready(function(){
                             +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+""
                             +"        </div>"
                             +"    </li>");
+           gage(parsedobj.id);
         } else {
-        $(divname+" .badge").html("Total ETH Hash Rate: "+totethhas);
-        $(divname+" .collapsible-body").html("          <span class='card-title'>Miner: "+obj.id+"</span>"
-                            +"          <p>Running version: "+obj.result[0]+"</p>"
+//        $(divname+" .badge").html("Total ETH Hash Rate: "+totethhas);
+        $(divname+" .collapsible-body").html("          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
+                            +"          <p>Running version: "+parsedobj.result[0]+"</p>"
                             +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
                             +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
                             +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
                             +"          <p>Total Sia Rate: "+totsiahash+"</p>"
                             +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"");
+        g[parsedobj.id].refresh(totaltoteth[parsedobj.id]);
         }
     gpucount = 0;
     sumeth = totaltoteth.reduce(function(a,b) {return a + b});
@@ -72,4 +79,13 @@ $(document).ready(function(){
   $(document).ready(function(){
     $('.collapsible').collapsible();
   });
+function gage (evt){
+  g[evt] = new JustGage({
+    id: gaugediv[evt],
+    value: totaltoteth[evt],
+    min: 0,
+    max: 200,
+    title: "Total ETH rate"
+    });
+};
 </script>
