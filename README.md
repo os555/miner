@@ -3,10 +3,15 @@ Claymore Monitor Dashboard
 
 Installation instructions in short:
 have apache2/PHP5/node-red installed
+
 download the code and place it in your www folder.
+
 Import the garbled text below into a flow in node-red.
+
 Edit the TCP requests to reflect your miners.
+
 Edit the e-mail to reflect your e-mail config.
+
 For now, if the miner is down you will be bombarded by e-mails. Also, it's all text info basically at the main page.
 
 This will change once I have time. Do let me know what you think for now.
