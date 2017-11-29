@@ -1,8 +1,4 @@
-<div class="row">
-  <ul class="collapsible" data-collapsible="expandable">
-  
-  </ul>   
-</div>
+<div class="row"></div>
 <script>
 miners();
 $(document).ready(function(){
@@ -22,11 +18,9 @@ $(document).ready(function(){
         splittosia = totsia.split(";");
         totsiahash = (splittosia[0]/1000).toFixed(3) + " MH/s";
         if ($(divname).length == 0 ){
-            $(".collapsible").append("<li id='"+obj.id+"'><div class='collapsible-header'>"
-                            +"     <i class='material-icons'>developer_board</i>"
-                            +"      Miner: "+obj.id
-                            +"      <span class='badge'>Total Hash Rate: "+totethhas+"</span></div>"            
-                            +"        <div class='collapsible-body blue-grey'>"
+            $(".row").append("    <div id='"+obj.id+"' class='col s12 m6'>"
+                            +"      <div class='card blue-grey darken-1 hoverable'>"
+                            +"        <div class='card-content white-text'>"
                             +"          <span class='card-title'>Miner: "+obj.id+"</span>"
                             +"          <p>Running version: "+obj.result[0]+"</p><br>"
                             +"          <p>Total Hash Rate: "+totethhas+"</p><br>"
@@ -35,21 +29,33 @@ $(document).ready(function(){
                             +"          <p>Total Sia Rate: "+totsiahash+"</p><br>"
                             +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"<br>"
                             +"        </div>"
-                            +"    </li>");
+                            +"        <div class='card-action'>"
+                            +"          <a href='#'>This is a link</a>"
+                            +"          <a href='#'>This is a link</a>"
+                            +"        </div>"
+                            +"      </div>"
+                            +"    </div>");
         } else {
-        $(divname+" .badge").html("Total Hash Rate: "+totethhas);
-        $(divname+" .collapsible-body").html("          <span class='card-title'>Miner: "+obj.id+"</span>"
+           $(divname).replaceWith("    <div id='"+obj.id+"' class='col s12 m6'>"
+                            +"      <div class='card blue-grey darken-1 hoverable'>"
+                            +"        <div class='card-content white-text'>"
+                            +"          <span class='card-title'>Miner: "+obj.id+"</span>"
                             +"          <p>Running version: "+obj.result[0]+"</p><br>"
                             +"          <p>Total Hash Rate: "+totethhas+"</p><br>"
                             +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p><br>"
                             +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+"<br>"
                             +"          <p>Total Sia Rate: "+totsiahash+"</p><br>"
-                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"<br>");
+                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"<br>"
+                            +"        </div>"
+                            +"        <div class='card-action'>"
+                            +"          <a href='#'>This is a link</a>"
+                            +"          <a href='#'>This is a link</a>"
+                            +"        </div>"
+                            +"      </div>"
+                            +"    </div>");
         }
+	 //HERE
     gpucount = 0;
     };
 });
-  $(document).ready(function(){
-    $('.collapsible').collapsible();
-  });
 </script>
