@@ -37,11 +37,13 @@
     <li class="active"><a href="#!" onclick="loadmain();"><i class="material-icons">dashboard</i>Main</a></li>
     <li><a href="#!" onclick="loadmonit();"><i class="material-icons">ac_unit</i>Temperatures</a></li>
     <li><a href="#!" onclick="loadmonitold();"><i class="material-icons">remove_red_eye</i>Old Dashboard</a></li>
+    <li><a href="#!" onclick="loadconfig();"><i class="material-icons">settings</i>Configuration</a></li>  
   </ul>
 <!-- END SIDE NAVIGATION BAR !-->
 </header>
 </head>
 <body>
+<!--
 <div class="row col s12">
     <div class="input-field col s6">
       <i class="material-icons prefix">ac_unit</i>
@@ -59,6 +61,7 @@
     </button>
     </div>
 </div>
+-->
 <div class="custcontainer">
 <!-- Page Content goes here -->
 </div>
@@ -73,6 +76,7 @@ $(".button-collapse").sideNav({
 function loadmain(){$(".custcontainer").load("pages/main.html");}
 function loadmonit(){$(".custcontainer").load("pages/tempmon.html");}
 function loadmonitold(){$(".custcontainer").load("pages/miner.php");}
+function loadconfig(){$(".custcontainer").load("pages/config.html");}
 $(document).ready(loadmain());
 
 function gettemp(){
