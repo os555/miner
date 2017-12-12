@@ -16,13 +16,21 @@
 <!--</form>-->
 <div id="chart_div" style="width: 100%; height: 100%;"></div>
 <script>
+var tempspattern = /^temperature[0-9]+/;
+var gpucount = 0;
+var tempfan = [];
 $(document).ready(function(){
     socket.onmessage = function(event) {
     message = event.data;
     obj = JSON.parse(message);
-     tempfan = obj.result[6].split(";");
+    // tempfan = obj.result[6].split(";");
+    for (var varName in obj) {
+     if (tempspattern.test(varName)) {
+                tempfan.push(obj[varName]);
+            }
+    }
         for (var i=0;i<tempfan.length;i++){
-            if ((i+2)%2==0) {
+           // if ((i+2)%2==0) {
                 divgaugename = "temp" + obj.id + gpucount;
                 if (jQuery.inArray(divgaugename, minegputemp) == -1){
                     minegputemp.push(divgaugename);
@@ -39,8 +47,8 @@ $(document).ready(function(){
                 $('table tbody tr td').addClass("card blue-grey darken-1 hoverable col s3");
                 };
                 gpucount += 1;
-            }
-            else {}
+          //  }
+           // else {}
     }
     gpucount = 0;
     }

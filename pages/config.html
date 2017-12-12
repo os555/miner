@@ -9,36 +9,14 @@
       <input id="maxhashdecred" type="text" class="validate">
       <label for="maxhashdecred">Maximum Hashrate Decred (Default: 4000)</label>
     </div>
-    <div class="col s12 input-field">
-    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="gettemp();">Submit
-        <i class="material-icons right">send</i>
-    </button>
-    </div>
     <div class="input-field col s6">
       <i class="material-icons prefix">ac_unit</i>
       <input id="icon_prefix" type="text" class="validate">
       <label for="icon_prefix">Temperature to warn (Default: 80)</label>
     </div>
 </div>
-<script>
-var deftemp = 80;
-var maxhasheth = 200;
-var maxhashdecred = 40000;
-function gettemp(){
-    if (parseInt($("#icon_prefix").val) != 0 ) {
-   deftemp = $("#icon_prefix").val(); } 
-    if (parseInt($("#maxhasheth").val) != 0 ) {
-    maxhasheth = parseInt($("#maxhasheth").val()); 
-    for (i=0; i < g.length; i++){
-        g[i].refresh(g[i].originalValue, maxhasheth);
-        }
-    }
-    deftemp = $("#icon_prefix").val(); } 
-    if (parseInt($("#maxhashdecred").val) != 0 ) {
-//    maxhashdecred = parseInt($("#maxhashdecred").val()); 
-//    for (i=0; i < g.length; i++){
-//        g[i].refresh(g[i].originalValue, maxhasheth);
-//        }
-    }
-};
-</script>
+<div class="col s12 input-field">
+    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="gettemp();">Submit
+        <i class="material-icons right">send</i>
+    </button>
+</div>

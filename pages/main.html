@@ -25,90 +25,70 @@
   </ul>   
 </div>
 <script>
-var totaltoteth = [];
-var totaltotsia = [];
-var gaugediv = [];
-var gaugedivdecred = [];
-var toteth = [];
-var g = [];
-var gdecred = [];
 $(document).ready(function(){
 	socket.onmessage = function(event) {
+      dynamicfans = ""; dynamictemps = ""; dynamicgpueths = ""; dynamicgpudcrs = "";
 	  message = event.data;
       parsedobj = JSON.parse(message);
-        divname = "#" + parsedobj.id;
-        toteth = parsedobj.result[2];
-        splittoteth = toteth.split(";");
-        //VGA SEGRAGATION
-        gpus = parsedobj.result[3].split(";");
-        //TEMP and FAN SEGRAGATION
-        tempfan = parsedobj.result[6].split(";");
-        totethhas = (splittoteth[0] / 1000).toFixed(3) + " MH/s";
-        toteth = parseFloat((splittoteth[0] / 1000).toFixed(3));
-        totaltoteth[parsedobj.id] = parseFloat(toteth);
-        totsia = parsedobj.result[4];
-        splittosia = totsia.split(";");
-        totsiahash = (splittosia[0]/1000).toFixed(3) + " MH/s";
-        totaltotsia[parsedobj.id] = parseFloat(splittosia[0]/1000);
-        gaugediv[parsedobj.id] = divname + "gauge";
-        gaugedivdecred[parsedobj.id] = divname + "gaugedecred";
+      divname = "#" + parsedobj.id;
+      ethrates[parsedobj.id] = parseFloat(parsedobj.ethrate);
+      dcrrates[parsedobj.id] = parseFloat(parsedobj.dcrrate);
+      gaugediv[parsedobj.id] = divname + "gauge";
+      gaugedivdecred[parsedobj.id] = divname + "gaugedecred";
+      for (var varName in parsedobj) {
+            if (fanspattern.test(varName)) {
+                dynamicfans += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " %</div>";
+            } else if (tempspattern.test(varName)) {
+                dynamictemps += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " C</div>";
+            } else if (ethratespattern.test(varName)) {
+                 dynamicgpueths += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " MH/s</div>";
+            } else if (dcrratespattern.test(varName)) {
+                 dynamicgpudcrs += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " MH/s</div>";
+            }
+        };
         if ($(divname).length == 0 ){
             $(".collapsible").append("<li id='"+parsedobj.id+"'><div class='collapsible-header'>"
                             +"     <i class='material-icons'>developer_board</i>"
-                            +"      Miner: "+parsedobj.id
-//                            +"      <span class='badge'>Total ETH Hash Rate: "+totethhas+"</span></div>"            
+                            +"      Miner: "+parsedobj.id       
                             +"      <span class='hoverable'><div id='"+gaugediv[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div><div id='"+gaugedivdecred[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div></span></div>"    
                             +"        <div class='collapsible-body blue-grey darken-1'>"
                             +"          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
-                            +"          <p>Running version: "+parsedobj.result[0]+"</p>"
-                            +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
-                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
-                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
-                            +"          <p>Total Sia Rate: "+totsiahash+"</p>"
-                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+""
+                            +"          <p>Running version: "+parsedobj.version+"</p>"
+                            +"          <p>Total ETH Hash Rate: "+parsedobj.ethrate+" MH/s</p>"
+                            +"          <p>"+dynamicfans+"</p>"
+                            +"          <p>"+dynamictemps+"</p>"
+                            +"          <p>"+dynamicgpueths+"</p>"
+                            +"          <p>"+dynamicgpudcrs+"</p>" 
+                            +"          <p>Total Number of Shares: "+parsedobj.ethshares+"</p><span>Rejected: "+parsedobj.ethreject+"</span>"
+                            +"          <p>Total Sia Rate: "+parsedobj.dcrrate+" MH/s</p>"
+                            +"          <p>Total Sia Shares: "+parsedobj.dcrshares+"</p><span>Rejected: "+parsedobj.dcrreject+"</span>"
                             +"        </div>"
                             +"    </li>");
-           gage(parsedobj.id);
+           gage(parsedobj.id, parsedobj.ethrate, parsedobj.dcrrate);
         } else {
-//        $(divname+" .badge").html("Total ETH Hash Rate: "+totethhas);
-        $(divname+" .collapsible-body").html("          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
-                            +"          <p>Running version: "+parsedobj.result[0]+"</p>"
-                            +"          <p>Total ETH Hash Rate: "+totethhas+"</p>"
-                            +"          <p>GPU1: "+(gpus[0]/1000).toFixed(3)+"MH/s, GPU2: "+(gpus[1]/1000).toFixed(3)+"MH/s, GPU3: "+(gpus[2]/1000).toFixed(3)+"MH/s, GPU4: "+(gpus[3]/1000).toFixed(3)+"MH/s, GPU5: "+(gpus[4]/1000).toFixed(3)+"MH/s, GPU6: "+(gpus[5]/1000).toFixed(3)+" MH/s</p>"
-                            +"          <p>Total Number of Shares: "+splittoteth[1]+"</p><span>Rejected: "+splittoteth[2]+""
-                            +"          <p>Total Sia Rate: "+totsiahash+"</p>"
-                            +"          <p>Total Sia Shares: "+splittosia[1]+"</p><span>Rejected: "+splittosia[2]+"");
-        g[parsedobj.id].refresh(totaltoteth[parsedobj.id]);
-        gdecred[parsedobj.id].refresh(totaltotsia[parsedobj.id]);
+        $(divname+" .collapsible-body").html("<span class='card-title'>Miner: "+parsedobj.id+"</span>"
+                            +"          <p>Running version: "+parsedobj.version+"</p>"
+                            +"          <p>Total ETH Hash Rate: "+parsedobj.ethrate+" MH/s</p>"
+                            +"          <p>"+dynamicfans+"</p>"
+                            +"          <p>"+dynamictemps+"</p>"
+                            +"          <p>"+dynamicgpueths+"</p>"
+                            +"          <p>"+dynamicgpudcrs+"</p>" 
+                            +"          <p>Total Number of Shares: "+parsedobj.ethshares+"</p><span>Rejected: "+parsedobj.ethreject+"</span>"
+                            +"          <p>Total Sia Rate: "+parsedobj.dcrrate+"</p>"
+                            +"          <p>Total Sia Shares: "+parsedobj.dcrshares+"</p><span>Rejected: "+parsedobj.dcrreject+"</span>");
+        g[parsedobj.id].refresh(parsedobj.ethrate);
+        gdecred[parsedobj.id].refresh(parsedobj.dcrrate);
         }
-    gpucount = 0;
-    sumeth = totaltoteth.reduce(function(a,b) {return a + b});
-    sumsia = totaltotsia.reduce(function(a,b) {return a + b});
-//    $("#totalrates").html("<p>Total ETH Rate: "+sumeth.toFixed(3)+ " MH/s</p>"
-//                         +"<p> Total SIA Rate: "+sumsia.toFixed(3)+ " MH/s</p>");
-    geth.refresh(sumeth.toFixed(3));
-    decred.refresh(sumsia.toFixed(3));
+    sumeth = ethrates.reduce(function(a,b) {return a + b});
+    sumdcr = dcrrates.reduce(function(a,b) {return a + b});
+    geth.refresh(sumeth);
+    decred.refresh(sumdcr);
     };
 });
+
   $(document).ready(function(){
     $('.collapsible').collapsible();
   });
-function gage (evt){
-  g[evt] = new JustGage({
-    id: gaugediv[evt],
-    value: totaltoteth[evt],
-    min: 0,
-    max: maxhasheth,
-    title: "Total ETH rate"
-    });
-  gdecred[evt] = new JustGage({
-    id: gaugedivdecred[evt],
-    value: totaltotsia[evt],
-    min: 0,
-    max: 5000,
-    title: "Total Decred rate"
-    });
-};
 var geth = new JustGage({
     id: "totalethrates",
     value: 0,
