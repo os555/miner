@@ -40,17 +40,20 @@ $(document).ready(function(){
                 dynamicfans += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " %</div>";
             } else if (tempspattern.test(varName)) {
                 dynamictemps += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " C</div>";
+                if (parsedobj[varName] > 84) {Materialize.toast('Miner' + parsedobj.id + ' - GPU '+varName+ ' is: '+ parsedobj[varName], 4000)};
             } else if (ethratespattern.test(varName)) {
                  dynamicgpueths += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " MH/s</div>";
+                if (parsedobj[varName] < 1) {Materialize.toast('Miner' + parsedobj.id + ' - GPU '+varName+ ' ETH Rate is: '+ parsedobj[varName], 4000)};
             } else if (dcrratespattern.test(varName)) {
                  dynamicgpudcrs += "<div class='chip'>" + varName + ": " + parsedobj[varName] + " MH/s</div>";
+                if (parsedobj[varName] < 1) {Materialize.toast('Miner' + parsedobj.id + ' - GPU '+varName+ ' DCR Rate is: '+ parsedobj[varName], 4000)};
             }
         };
         if ($(divname).length == 0 ){
-            $(".collapsible").append("<li id='"+parsedobj.id+"'><div class='collapsible-header'>"
+            $(".collapsible").append("<li id='"+parsedobj.id+"' class='col s12 m6'><div class='collapsible-header'>"
                             +"     <i class='material-icons'>developer_board</i>"
                             +"      Miner: "+parsedobj.id       
-                            +"      <span class='hoverable'><div id='"+gaugediv[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div><div id='"+gaugedivdecred[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div></span></div>"    
+                            +"      <span class='hoverable'><div id='"+gaugediv[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div><div id='"+gaugedivdecred[parsedobj.id]+"' style='width:80px; height:60px' class='gauges'></div></span><span></div>"    
                             +"        <div class='collapsible-body blue-grey darken-1'>"
                             +"          <span class='card-title'>Miner: "+parsedobj.id+"</span>"
                             +"          <p>Running version: "+parsedobj.version+"</p>"
@@ -93,14 +96,14 @@ var geth = new JustGage({
     id: "totalethrates",
     value: 0,
     min: 0,
-    max: 1500,
+    max: 2000,
     title: "Combined ETH rate"
 })
 var decred =  new JustGage({
     id: "totaldecredrates",
     value: 0,
     min: 0,
-    max: 40000,
+    max: 60000,
     title: "Combined Decred rate"
 })
 </script>
